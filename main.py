@@ -11,6 +11,7 @@ class BaseClient(discord.Client):
 
     async def on_ready(self):
         print('We have logged in as {0.user}'.format(self))
+        # print(os.getenv('refresh_token'))
 
     async def on_message(self, message):
         if message.author == self.user:

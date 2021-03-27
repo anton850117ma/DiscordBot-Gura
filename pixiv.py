@@ -3,10 +3,10 @@ import sys
 import requests
 import settings
 import io
-import aiohttp
-import asyncio
 from pixivpy3 import *
-from pixivpy_async import *
+# import aiohttp
+# import asyncio
+# from pixivpy_async import *
 
 if sys.version_info >= (3, 0):
     import importlib
@@ -37,4 +37,4 @@ def get_following_works(nums):
     return json_result
 
 
-# get_following_works(70)
+# get_following_works(10)
