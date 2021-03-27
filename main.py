@@ -24,6 +24,7 @@ class BaseClient(discord.Client):
             args = message.content.split(" ")
             nums = 5 if len(args) != 2 else int(args[1])
             data = pix.get_following_works(nums)
+            gg = 0
 
             for index in range(nums):
                 illust = data.response[index]
