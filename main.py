@@ -10,7 +10,7 @@ import other as oth
 class BaseClient(discord.Client):
 
     async def on_ready(self):
-        print('We have logged in as {0.user}'.format(self))
+        print('I have logged in as {0.user}'.format(self))
         # print(os.getenv('refresh_token'))
 
     async def on_message(self, message):
@@ -32,7 +32,8 @@ class BaseClient(discord.Client):
             nums = 5 if len(args) != 2 else int(args[1])
             pics = pix.get_following_works(nums)
             for embed in pics:
-                await message.channel.send(embed=embed)
+                msg = await message.channel.send(embed=embed)
+                await msg.add_reaction('🔽')
 
 
 client = BaseClient()

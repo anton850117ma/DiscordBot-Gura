@@ -26,14 +26,16 @@ sys.dont_write_bytecode = True
 
 
 def init():
-
     api = AppPixivAPI()
     api.auth(refresh_token=os.getenv('refresh_token'))
     return api
 
 
-def get_following_works(nums):
+def replace_url(url):
+    return url.replace('i.pximg.net', 'i.pixiv.cat')
 
+
+def get_following_works(nums):
     papi = init()
     data = papi.illust_follow()
     pics = []
@@ -41,25 +43,22 @@ def get_following_works(nums):
         illust = data.illusts[index]
         if len(illust['meta_single_page']) > 0:
             embed = discord.Embed(
-                title=illust['title'], color=3447003)
-            embed.set_image(url=illust.meta_single_page['original_image_url'].replace(
-                'i.pximg.net', 'i.pixiv.cat'))
+                title=illust['title'], url='', color=3447003)
+            embed.set_image(url=replace_url(
+                illust.meta_single_page['original_image_url']))
             embed.set_author(
                 name=illust.user['name'],
-                icon_url=illust.user.profile_image_urls['medium'].replace(
-                    'i.pximg.net', 'i.pixiv.cat'))
+                icon_url=replace_url(illust.user.profile_image_urls['medium']))
             embed.set_footer(text=illust['create_date'])
             pics.append(embed)
         else:
             for pic in illust['meta_pages']:
                 embed = discord.Embed(
                     title=illust['title'], color=10181046)
-                embed.set_image(url=pic.image_urls['original'].replace(
-                    'i.pximg.net', 'i.pixiv.cat'))
+                embed.set_image(url=replace_url(pic.image_urls['original']))
                 embed.set_author(
                     name=illust.user['name'],
-                    icon_url=illust.user.profile_image_urls['medium'].replace(
-                        'i.pximg.net', 'i.pixiv.cat'))
+                    icon_url=replace_url(illust.user.profile_image_urls['medium']))
                 embed.set_footer(text=illust['create_date'])
                 pics.append(embed)
     return pics
