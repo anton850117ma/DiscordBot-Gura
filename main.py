@@ -18,25 +18,23 @@ class BaseClient(discord.Client):
             return
 
         if message.content.startswith('!hello'):
-            await message.channel.send('Hello World!')
+            embed = discord.Embed(title='Go to YouTube',
+                                  url='https://www.youtube.com/',
+                                  description='New video guys click on the title')
+            await message.channel.send(embed=embed)
+
+        if message.content.startswith('!inspire'):
+            quote = oth.get_quote()
+            await message.channel.send(quote)
 
         if message.content.startswith('!follow'):
 
             args = message.content.split(" ")
             nums = 5 if len(args) != 2 else int(args[1])
-            data = pix.get_following_works(nums)
+            pics = pix.get_following_works(nums)
 
-            for index in range(nums):
-                illust = data.response[index]
-                url = illust.image_urls['large'].replace(
-                    'i.pximg.net', 'i.pixiv.cat')
-
-                my_string = str(index+1) + ". " + url
-                await message.channel.send(my_string)
-
-        if message.content.startswith('!inspire'):
-            quote = oth.get_quote()
-            await message.channel.send(quote)
+            for embed in pics:
+                await message.channel.send(embed=embed)
 
 
 client = BaseClient()

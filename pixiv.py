@@ -3,6 +3,8 @@ import sys
 import requests
 import settings
 import io
+import discord
+from datetime import datetime
 from pixivpy3 import *
 # import aiohttp
 # import asyncio
@@ -33,8 +35,23 @@ def init():
 def get_following_works(nums):
 
     papi = init()
-    json_result = papi.illust_follow()
-    return json_result
-
-
-# get_following_works(10)
+    data = papi.illust_follow()
+    pics = []
+    for index in range(nums):
+        illust = data.illusts[index]
+        if len(illust['meta_single_page']) > 0:
+            embed = discord.Embed(
+                title=illust['title'], color=3447003)
+            embed.set_image(url=illust.meta_single_page['original_image_url'].replace(
+                'i.pximg.net', 'i.pixiv.cat'))
+            embed.set_author(name=illust.user['name'])
+            pics.append(embed)
+        else:
+            for pic in illust['meta_pages']:
+                embed = discord.Embed(
+                    title=illust['title'], color=10181046)
+                embed.set_image(url=pic.image_urls['original'].replace(
+                    'i.pximg.net', 'i.pixiv.cat'))
+                embed.set_author(name=illust.user['name'])
+                pics.append(embed)
+    return pics
