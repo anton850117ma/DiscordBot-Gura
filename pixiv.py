@@ -44,7 +44,11 @@ def get_following_works(nums):
                 title=illust['title'], color=3447003)
             embed.set_image(url=illust.meta_single_page['original_image_url'].replace(
                 'i.pximg.net', 'i.pixiv.cat'))
-            embed.set_author(name=illust.user['name'])
+            embed.set_author(
+                name=illust.user['name'],
+                icon_url=illust.user.profile_image_urls['medium'].replace(
+                    'i.pximg.net', 'i.pixiv.cat'))
+            embed.set_footer(text=illust['create_date'])
             pics.append(embed)
         else:
             for pic in illust['meta_pages']:
@@ -52,6 +56,10 @@ def get_following_works(nums):
                     title=illust['title'], color=10181046)
                 embed.set_image(url=pic.image_urls['original'].replace(
                     'i.pximg.net', 'i.pixiv.cat'))
-                embed.set_author(name=illust.user['name'])
+                embed.set_author(
+                    name=illust.user['name'],
+                    icon_url=illust.user.profile_image_urls['medium'].replace(
+                        'i.pximg.net', 'i.pixiv.cat'))
+                embed.set_footer(text=illust['create_date'])
                 pics.append(embed)
     return pics
