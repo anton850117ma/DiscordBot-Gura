@@ -17,22 +17,20 @@ class BaseClient(discord.Client):
         if message.author == self.user:
             return
 
+        # hellow world!
         if message.content.startswith('!hello'):
-            embed = discord.Embed(title='Go to YouTube',
-                                  url='https://www.youtube.com/',
-                                  description='New video guys click on the title')
-            await message.channel.send(embed=embed)
+            await message.channel.send("Hello World!")
 
+        # make inspire
         if message.content.startswith('!inspire'):
             quote = oth.get_quote()
             await message.channel.send(quote)
 
+        # show several artworks
         if message.content.startswith('!follow'):
-
             args = message.content.split(" ")
             nums = 5 if len(args) != 2 else int(args[1])
             pics = pix.get_following_works(nums)
-
             for embed in pics:
                 await message.channel.send(embed=embed)
 
