@@ -25,7 +25,7 @@ sys.dont_write_bytecode = True
 
 def init():
 
-    api = PixivAPI()
+    api = AppPixivAPI()
     api.auth(refresh_token=os.getenv('refresh_token'))
     return api
 
@@ -33,7 +33,7 @@ def init():
 def get_following_works(nums):
 
     papi = init()
-    json_result = papi.me_following_works(per_page=nums)
+    json_result = papi.illust_follow()
     return json_result
 
 
