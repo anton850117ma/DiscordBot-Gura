@@ -3,7 +3,7 @@ import sys
 import requests
 import settings
 import io
-import discord
+from discord import Embed
 from datetime import datetime
 from pixivpy3 import *
 # import aiohttp
@@ -23,12 +23,12 @@ sys.dont_write_bytecode = True
 #     async with session.get(url) as resp:
 #         data = io.BytesIO(await resp.read())
 #         await message.channel.send(file=discord.File(data, illust.title + filename))
-
+papi = None
 
 def init():
-    api = AppPixivAPI()
-    api.auth(refresh_token=os.getenv('refresh_token'))
-    return api
+    global papi
+    papi = AppPixivAPI()
+    papi.auth(refresh_token=os.getenv('refresh_token'))
 
 
 def replace_url(url):
@@ -36,13 +36,14 @@ def replace_url(url):
 
 
 def get_following_works(nums):
-    papi = init()
+    global papi
     data = papi.illust_follow()
     pics = []
     for index in range(nums):
         illust = data.illusts[index]
         if len(illust['meta_single_page']) > 0:
-            embed = discord.Embed(
+            # TODO: URL=ORIGINAL, IMAGE_URL=LARGE
+            embed = Embed(
                 title=illust['title'], url='', color=3447003)
             embed.set_image(url=replace_url(
                 illust.meta_single_page['original_image_url']))
@@ -53,7 +54,7 @@ def get_following_works(nums):
             pics.append(embed)
         else:
             for pic in illust['meta_pages']:
-                embed = discord.Embed(
+                embed = Embed(
                     title=illust['title'], color=10181046)
                 embed.set_image(url=replace_url(pic.image_urls['original']))
                 embed.set_author(

@@ -1,19 +1,20 @@
 import os
-import discord
 import requests
 import json
 import settings
+from discord import *
 import pixiv as pix
 import other as oth
 
 
-class BaseClient(discord.Client):
+class BaseClient(Client):
 
     async def on_ready(self):
+        pix.init()
         print('I have logged in as {0.user}'.format(self))
         # print(os.getenv('refresh_token'))
 
-    async def on_message(self, message):
+    async def on_message(self, message: Message):
         if message.author == self.user:
             return
 
@@ -34,6 +35,23 @@ class BaseClient(discord.Client):
             for embed in pics:
                 msg = await message.channel.send(embed=embed)
                 await msg.add_reaction('🔽')
+
+    async def on_reaction_add(self, reaction: Reaction, user: User):
+
+        if reaction.message.author == self.user and user != self.user:
+            if str(reaction.emoji) == '🔽':
+                await reaction.message.add_reaction('👍')
+                # TODO: NAME CONFLICTION AND DOWNLOAD LOCATION
+                for embed in reaction.message.embeds:
+                    if embed.image.url.endswith('jpg'):
+                        pic = open(embed.title + str('.jpg'), 'wb')
+                    elif embed.image.url.endswith('png'):
+                        pic = open(embed.title + str('.png'), 'wb')
+                    elif embed.image.url.endswith('gif'):
+                        pic = open(embed.title + str('.gif'), 'wb')
+                    pic.write(requests.get(embed.image.url).content)
+                    pic.close()
+                await reaction.message.remove_reaction(reaction, user)
 
 
 client = BaseClient()
