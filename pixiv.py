@@ -37,7 +37,7 @@ def replace_url(url):
 
 def get_following_works(nums):
     global papi
-    data = papi.illust_follow()
+    data = papi.illust_follow(offset=nums)
     pics = []
     for index in range(nums):
         illust = data.illusts[index]
